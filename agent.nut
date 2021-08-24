@@ -22,6 +22,9 @@ const HTML_STRING = @"
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta charset='UTF-8'>
     <style>
+        .col-5 {-ms-flex:0 0 25%%;flex:0 0 25%%;max-width:25%%}
+        .col-3 {-ms-flex:0 0 15%%;flex:0 0 15%%;max-width:15%%}
+        .col-6 {-ms-flex:0 0 70%%;flex:0 0 70%%;max-width:70%%}
         .center { margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; }
         body { background-color: #6C747E; }
         p {color: white; font-family: Abel, sans-serif; font-size: 18px;}
@@ -58,7 +61,7 @@ const HTML_STRING = @"
             .uicontent {border: 0px;}
             .col-1 {max-width: 0%%; flex: 0 0 0%%;}
             .col-3 {max-width: 0%%; flex: 0 0 0%%;}
-            .col-5 {max-width: 50%%; flex: 0 0 50%%;}
+            .col-5 {max-width: 25%%; flex: 0 0 25%%;}
             .col-6 {max-width: 100%%; flex: 0 0 100%%;}
             .btn-warning {width: 140px;}
         }
@@ -66,7 +69,6 @@ const HTML_STRING = @"
      </style>
 </head>
 <body>
-    <!-- Modals -->
    <div id='notify' class='modal'>
        <div class='modal-content-ok'>
            <h3 align='center' style='color: white; font-family: Abel'>Device&nbsp;state&nbsp;changed</h3>
@@ -84,51 +86,56 @@ const HTML_STRING = @"
                         <hr />
                             <div class='row' align='center'>
                             <div class='col-5'>
-                                <p class='box' align='right'><b>Sensor Location</b></p>
-                                <p class='box' align='right'><b>last Reading</b></p>
+                                <p class='box' align='right'><b>Location</b></p>
+                                <p class='box' align='right'><b>STPM32</b></p>
                             </div>
                             <div class='col-5'>
                                 <p class='box' align='left' id='sl'><span>Unknown</span></p>
-                                <p class='box' align='left' id='lr'><span>Unknown</span></p>
+                                <p class='box' align='left' id='stpm'><span>Unknown</span></p>
                             </div>
+                                <div class='col-5'>
+                                <p class='box' align='right'><b>WAN IP</b></p>
+                                <p class='box' align='right'><b>HTS221</b></p>
+                           </div>
+                            <div class='col-5'>
+                                <p class='box' align='left' id='wip'><span>Unknown</span></p>
+                                <p class='box' align='left' id='hts'><span>Unknown</span></p>
+                           </div>
                             </div>
                         <hr />
                         <div class='row' align='center'>
                             <div class='col-5'>
-                                <p class='box' align='right'><b>Device IP</b></p>
-                                <p class='box' align='right'><b>WAN IP</b></p>
-                                <p class='box' align='right'><b>Temprature Reading</b></p>
-                                <p class='box' align='right'><b>Humidity Reading</b></p>
-                                <p class='box' align='right'><b>Voltage Reading</b></p>
-                                <p class='box' align='right'><b>Current Reading</b></p>
-                                <p class='box' align='right'><b>Power Reading</b></p>
-                                <p class='box' align='right'><b>Power Factor</b></p>
+                                <p class='box' align='right'><b>Temprature</b></p>
+                                <p class='box' align='right'><b>Voltage</b></p>
+                                <p class='box' align='right'><b>Power</b></p>
                             </div>
                             <div class='col-5'>
-                                <p class='box' align='left' id='ip'><span>Unknown</span></p>
-                                <p class='box' align='left' id='wip'><span>Unknown</span></p>
                                 <p class='box' align='left' id='te'><span>Unknown</span>&nbsp;&deg;C&nbsp;</p>
-                                <p class='box' align='left' id='hu'><span>Unknown</span>&nbsp;&percnt;&nbsp;</p align='left'>
                                 <p class='box' align='left' id='vo'><span>Unknown</span>&nbsp;V&nbsp;</p>
-                                <p class='box' align='left' id='cu'><span>Unknown</span>&nbsp;A&nbsp;</p align='left'>
                                 <p class='box' align='left' id='po'><span>Unknown</span>&nbsp;W&nbsp;</p>
+                            </div>
+                            <div class='col-5'>
+                                <p class='box' align='right'><b>Humidity</b></p>
+                                <p class='box' align='right'><b>Current</b></p>
+                                <p class='box' align='right'><b>Phi</b></p>
+                            </div>
+                            <div class='col-5'>
+                                <p class='box' align='left' id='hu'><span>Unknown</span>&nbsp;&#37&nbsp;</p>
+                                <p class='box' align='left' id='cu'><span>Unknown</span>&nbsp;mA&nbsp;</p align='left'>
                                 <p class='box' align='left' id='pf'><span>Unknown</span>&nbsp;&nbsp;</p>
                             </div>
                         </div>
-                    <hr />
-                        <div class='row' align='center'>
-                            <div class='col-5'>
-                                <p class='box' align='right'>
-                                Red&nbsp;LED&nbsp;<label class='switch'><input type='checkbox' id='re'><span class='slider round'></span></label>
-                                </p>
-                            </div>
-                            <div class='col-5'>
-                                <p class='box' align='left'>
-                                Green&nbsp;&nbsp;LED&nbsp;<label class='switch'><input type='checkbox' id='gr'><span class='slider round'></span></label>
-                                </p>
-                            </div>
-                        </div>
                     </div>
+                    <div class='col-3'></div>
+                </div>
+                <!-- Graphic Readout -->
+                <div class='row' align='center'>
+                    <div class='col-3'></div>
+                    <div class='col-6'>
+                        <h4 class='showhidewlans text-center'>Graphic Charts</h4>
+                        <div id='chartContainer' style='height: 240px; max-width: 920px; margin: 10px auto;'></div>
+                        <div id='chartContainer2' style='height: 240px; max-width: 920px; margin: 10px auto;'></div>
+                        </div>
                     <div class='col-3'></div>
                 </div>
                 <p>&nbsp;</p>
@@ -137,6 +144,124 @@ const HTML_STRING = @"
     </div>
 
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script src='https://canvasjs.com/assets/script/canvasjs.min.js'></script>
+    <script>
+        window.onload = function() {
+    
+        var tempraturedataPoints = [];
+        var humiditydataPoints = [];
+        
+        var voltagedataPoints = [];
+        var currentdataPoints = [];
+        var powerdataPoints = [];
+        
+        var xValue = 0;
+        var yValue1 = 3000;
+        var yValue2 = 6000;
+        
+        var chart = new CanvasJS.Chart('chartContainer', {
+            zoomEnabled: true,
+        	theme: 'light2',
+        	title: {
+        		text: 'Temprature and humidity'
+        	},
+        	axisX: {
+		        title: 'chart updates every 5 secs'
+        	},	
+        	legend: {
+        		cursor:'pointer',
+        		verticalAlign: 'top',
+        		fontSize: 16,
+        		fontColor: 'dimGrey',
+        		itemclick : toggleDataSeries
+             	},
+        	data: [{
+        		type: 'line',
+        		name: 'Temprature',
+        		showInLegend: true,
+        		dataPoints: tempraturedataPoints
+        	    },
+        	    {
+        	    type: 'line',
+        		name: 'Humidity',
+        		showInLegend: true,
+        		dataPoints: humiditydataPoints
+        	    },
+        	]
+        });
+        var chart2 = new CanvasJS.Chart('chartContainer2', {
+            zoomEnabled: true,
+        	theme: 'light2',
+        	title: {
+        		text: 'Voltage and Current'
+        	},
+        	axisX: {
+		        title: 'chart updates every 5 secs'
+        	},	
+        	legend: {
+        		cursor:'pointer',
+        		verticalAlign: 'top',
+        		fontSize: 16,
+        		fontColor: 'dimGrey',
+        		itemclick : toggleDataSeries
+             	},
+        	data: [{
+        		type: 'line',
+        		name: 'Voltage',
+        		showInLegend: true,
+        		dataPoints: voltagedataPoints
+        	    },
+        	    {
+        	    type: 'line',
+        		name: 'Current',
+        		showInLegend: true,
+        		dataPoints: currentdataPoints
+        	    },
+        	]
+        });
+        readState();
+        var dataTimer = setInterval(readState, 5000);
+        function addData(data) {
+       		//dataPoints.shift();
+    		console.log(xValue);
+    		tempraturedataPoints.push({x: xValue, y:  parseInt(data.te )});
+    		humiditydataPoints.push({x: xValue, y:  parseInt(data.hu )});
+    		
+    		voltagedataPoints.push({x: xValue, y:  parseInt(data.vo )});
+    		currentdataPoints.push({x: xValue, y:  parseInt(data.cu )});
+    		
+    		xValue++;
+    		yValue1 = parseInt(data.te*1.20);
+    		yValue2 = parseInt(data.hu*1.20);
+            chart.options.data[0].legendText = ' Temparature ' + data.te + 'C';
+	        chart.options.data[1].legendText = 'Humidity ' + data.hu + '%%'; 
+     	    
+     	    chart.render();
+     	    chart2.render();
+        }
+        
+        function readState() {
+            $.ajax({
+                url: agenturl + '/current',
+                type: 'GET',
+                cache: false,
+                success: function(response) {
+                    getState(addData);
+                }
+            });
+        }   
+        
+        function toggleDataSeries(e) {
+        	if (typeof(e.dataSeries.visible) === 'undefined' || e.dataSeries.visible) {
+        		e.dataSeries.visible = false;
+        	}
+        	else {
+        		e.dataSeries.visible = true;
+        	}
+        	chart.render();
+        }
+    }
+    </script>
     <script>
     // Variables
     var agenturl = '%s';
@@ -149,19 +274,9 @@ const HTML_STRING = @"
     // Begin the online status update loop
     var stateTimer = setInterval(checkState, 5000);
 
-    // Set UI click actions
-    document.getElementById('search-button').onclick = wsearch;
-
-    // Configure Show/Hide Nearby Networks toggle
-    $('.showhidewlans').click(function() {
-        $('.wlans').toggle();
-    });
-
     // Functions
     function updateReadout(data) {
-        var date = Date();
         $('#status span').text(data.state);
-        $('#ip span').text(data.ip);
         $('#wip span').text(data.wip);
         $('#te span').text(data.te);
         $('#hu span').text(data.hu);
@@ -170,15 +285,14 @@ const HTML_STRING = @"
         $('#po span').text(data.po);
         $('#pf span').text(data.pf);
         $('#sl span').text(data.sl);
-        if (data.state == 'connected')
-        {
-            $('#lr span').text(date);
-        } else
-        {
-            $('#lr span').text('Unknown');
-        }
-        document.getElementById('gr').checked = data.gr;
-        document.getElementById('re').checked = data.re;
+        if(!data.stpm)
+            $('#stpm span').text('Not Connected');
+        else
+            $('#stpm span').text('Connected');
+        if(!data.hts)
+            $('#hts span').text('Not Connected');
+        else
+            $('#hts span').text('Connected');
 
         let newstate = (data.state == 'connected' ? 1 : 2);
 
@@ -215,13 +329,32 @@ const HTML_STRING = @"
                 getState(updateReadout);
             }
         });
+    }   
+    
+
+    function setModal() {
+        clearTimeout(timer);
+
+        var modal = document.getElementById('notify');
+        modal.style.display = 'block';
+
+        timer = setTimeout(function() {
+            modal.style.display = 'none';
+        }, 6000);
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                clearTimeout(timer);
+                modal.style.display = 'none';
+            }
+        };
     }
 
     </script>
 </body>
 </html>";
 
-/*
+/* 
  * GLOBALS
  *
  */
@@ -234,7 +367,7 @@ local isConnected = false;
 local twilioClient = null;
 local targetNumber = null;
 local meters = null;
-
+local stpmConnected = false;
 
 /*
  * FUNCTIONS
@@ -242,7 +375,7 @@ local meters = null;
  */
 function debugAPI(context, next) {
     // Display a UI API activity report - this is useful for agent-served UI debugging
-    server.log("API received a request at " + time() + ": " + context.req.method.toupper() + " @ " + context.req.path.tolower());
+    //server.log("API received a request at " + time() + ": " + context.req.method.toupper() + " @ " + context.req.path.tolower());
     if (context.req.rawbody.len() > 0) server.log("Request body: " + context.req.rawbody.tolower());
 
     // Invoke the next middleware (if any) registered with Rocky
@@ -327,9 +460,11 @@ webAPI.get("/current", function(context) {
                 sendData.po <- meters.po;
                 sendData.pf <- meters.pf;
                 sendData.sl <- "Pittsburgh, PA";
-                sendData.tr <- meters.tr;
+                //sendData.tr <- meters.tr;
                 sendData.gr <- meters.gr;
                 sendData.re <- meters.re;
+                sendData.stpm <- meters.stpm;
+                sendData.hts <- meters.hts;
             }
         }
     }else{
@@ -348,7 +483,7 @@ webAPI.get("/current", function(context) {
     }
 
     // Return the status information to the web UI
-    server.log(http.jsonencode(sendData));
+    //server.log(http.jsonencode(sendData));
     context.send(200, http.jsonencode(sendData));
 });
 
